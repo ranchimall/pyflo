@@ -12,7 +12,7 @@ import traceback
 from pybtc.connector.utils import decode_block_tx
 
 import _pickle as pickle
-from pybtc  import LRU as MRU
+from pybtc  import MRU
 
 
 class BlockLoader:
@@ -241,18 +241,16 @@ class Worker:
                 if y["result"] is not None:
                     block = decode_block_tx(y["result"])
                     for z in block["rawTx"]:
-                        if not block["rawTx"][z]["coinbase"]:
-                            for i in block["rawTx"][z]["vIn"]:
-                                inp = block["rawTx"][z]["vIn"][i]
-                                outpoint = b"".join((inp["txId"], int_to_bytes(inp["vOut"])))
-                                try:
-                                   r = self.coins.delete(outpoint)
-                                   self.log.critical(str(r))
-                                   block["rawTx"][z]["vIn"][i]["_c_"] = r
-                                   t += 1
-                                   self.destroyed_coins[r[0]] = True
-                                except:
-                                    pass
+                        for i in block["rawTx"][z]["vIn"]:
+                            inp = block["rawTx"][z]["vIn"][i]
+                            outpoint = b"".join((inp["txId"], int_to_bytes(inp["vOut"])))
+                            try:
+                               r = self.coins.delete(outpoint)
+                               block["rawTx"][z]["vIn"][i]["_c_"] = r
+                               t += 1
+                               self.destroyed_coins[r[0]] = True
+                            except:
+                                pass
                         for i in block["rawTx"][z]["vOut"]:
                             o = b"".join((block["rawTx"][z]["txId"], int_to_bytes(i)))
                             pointer = (x << 42) + (z << 21) + i
@@ -262,7 +260,6 @@ class Worker:
                                 address = b"".join((bytes([block["rawTx"][z]["vOut"][i]["nType"]]),
                                                            block["rawTx"][z]["vOut"][i]["addressHash"]))
                             self.coins[o] = (pointer, block["rawTx"][z]["vOut"][i]["value"], address)
-                            self.log.critical(str(o))
                     blocks[x] = block
             if blocks:
                 blocks[x]["checkpoint"] = x
@@ -272,7 +269,6 @@ class Worker:
                         try:
                             pointer = (x << 42) + (y << 21) + i
                             r = self.destroyed_coins.delete(pointer)
-                            self.log.critical(str(r))
                             blocks[x]["rawTx"][y]["vOut"][i]["_s_"] = r
                         except: pass
 
