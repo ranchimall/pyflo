@@ -209,8 +209,8 @@ class Worker:
         self.loop.set_default_executor(ThreadPoolExecutor(20))
         self.out_writer = out_writer
         self.in_reader = in_reader
-        # self.coins = MRU(100000)
-        # self.destroyed_coins = MRU(100000)
+        self.coins = MRU(100000)
+        self.destroyed_coins = MRU(100000)
         signal.signal(signal.SIGTERM, self.terminate)
         self.loop.create_task(self.message_loop())
         self.loop.run_forever()
@@ -245,10 +245,10 @@ class Worker:
                             inp = block["rawTx"][z]["vIn"][i]
                             outpoint = b"".join((inp["txId"], int_to_bytes(inp["vOut"])))
                             try:
-                               # r = self.coins.delete(outpoint)
-                               # block["rawTx"][z]["vIn"][i]["_c_"] = r
+                               r = self.coins.delete(outpoint)
+                               block["rawTx"][z]["vIn"][i]["_c_"] = r
                                t += 1
-                               # self.destroyed_coins[r[0]] = True
+                               self.destroyed_coins[r[0]] = True
                             except:
                                 pass
                         for i in block["rawTx"][z]["vOut"]:
@@ -259,7 +259,7 @@ class Worker:
                             except:
                                 address = b"".join((bytes([block["rawTx"][z]["vOut"][i]["nType"]]),
                                                            block["rawTx"][z]["vOut"][i]["addressHash"]))
-                            # self.coins[o] = (pointer, block["rawTx"][z]["vOut"][i]["value"], address)
+                            self.coins[o] = (pointer, block["rawTx"][z]["vOut"][i]["value"], address)
                     blocks[x] = block
             if blocks:
                 blocks[x]["checkpoint"] = x
@@ -268,8 +268,8 @@ class Worker:
                     for i in blocks[x]["rawTx"][y]["vOut"]:
                         try:
                             pointer = (x << 42) + (y << 21) + i
-                            # r = self.destroyed_coins.delete(pointer)
-                            # blocks[x]["rawTx"][y]["vOut"][i]["_s_"] = r
+                            r = self.destroyed_coins.delete(pointer)
+                            blocks[x]["rawTx"][y]["vOut"][i]["_s_"] = r
                         except: pass
 
                 blocks[x] = pickle.dumps(blocks[x])
