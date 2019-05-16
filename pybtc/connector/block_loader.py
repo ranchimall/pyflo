@@ -269,6 +269,7 @@ class Worker:
                         try:
                             pointer = (x << 42) + (y << 21) + i
                             r = self.destroyed_coins.delete(pointer)
+                            self.log.critical(str(r))
                             blocks[x]["rawTx"][y]["vOut"][i]["_s_"] = r
                         except: pass
 
