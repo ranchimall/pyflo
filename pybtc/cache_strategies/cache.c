@@ -727,14 +727,14 @@ static PyObject *moduleinit(void) {
     MRUType.tp_new = PyType_GenericNew;
     if (PyType_Ready(&MRUType) < 0) return NULL;
     LRUType.tp_new = PyType_GenericNew;
-    if (PyType_Ready(&LRUType) < 0) return NULL;
+//    if (PyType_Ready(&LRUType) < 0) return NULL;
     m = PyModule_Create(&moduledef);
     if (m == NULL) return NULL;
     Py_INCREF(&NodeType);
     Py_INCREF(&MRUType);
-    Py_INCREF(&LRUType);
+//    Py_INCREF(&LRUType);
     PyModule_AddObject(m, "MRU", (PyObject *) &MRUType);
-    PyModule_AddObject(m, "LRU", (PyObject *) &LRUType);
+//    PyModule_AddObject(m, "LRU", (PyObject *) &LRUType);
     return m;
 }
 
