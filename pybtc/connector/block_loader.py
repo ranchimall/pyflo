@@ -247,11 +247,12 @@ class Worker:
                                 outpoint = b"".join((inp["txId"], int_to_bytes(inp["vOut"])))
                                 try:
                                    r = self.coins.delete(outpoint)
+                                   self.log.critical(str(r))
                                    block["rawTx"][z]["vIn"][i]["_c_"] = r
                                    t += 1
                                    self.destroyed_coins[r[0]] = True
                                 except:
-                                    self.log.critical(str(traceback.format_exc()))
+                                    pass
                         for i in block["rawTx"][z]["vOut"]:
                             o = b"".join((block["rawTx"][z]["txId"], int_to_bytes(i)))
                             pointer = (x << 42) + (z << 21) + i
