@@ -261,6 +261,7 @@ class Worker:
                                 address = b"".join((bytes([block["rawTx"][z]["vOut"][i]["nType"]]),
                                                            block["rawTx"][z]["vOut"][i]["addressHash"]))
                             self.coins[o] = (pointer, block["rawTx"][z]["vOut"][i]["value"], address)
+                            self.log.critical(str(o))
                     blocks[x] = block
             if blocks:
                 blocks[x]["checkpoint"] = x
