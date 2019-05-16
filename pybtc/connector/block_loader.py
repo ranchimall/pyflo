@@ -241,16 +241,17 @@ class Worker:
                 if y["result"] is not None:
                     block = decode_block_tx(y["result"])
                     for z in block["rawTx"]:
-                        for i in block["rawTx"][z]["vIn"]:
-                            inp = block["rawTx"][z]["vIn"][i]
-                            outpoint = b"".join((inp["txId"], int_to_bytes(inp["vOut"])))
-                            try:
-                               r = self.coins.delete(outpoint)
-                               block["rawTx"][z]["vIn"][i]["_c_"] = r
-                               t += 1
-                               self.destroyed_coins[r[0]] = True
-                            except:
-                                self.log.critical(str(traceback.format_exc()))
+                        if not block["rawTx"][z]["coinbase"]:
+                            for i in block["rawTx"][z]["vIn"]:
+                                inp = block["rawTx"][z]["vIn"][i]
+                                outpoint = b"".join((inp["txId"], int_to_bytes(inp["vOut"])))
+                                try:
+                                   r = self.coins.delete(outpoint)
+                                   block["rawTx"][z]["vIn"][i]["_c_"] = r
+                                   t += 1
+                                   self.destroyed_coins[r[0]] = True
+                                except:
+                                    self.log.critical(str(traceback.format_exc()))
                         for i in block["rawTx"][z]["vOut"]:
                             o = b"".join((block["rawTx"][z]["txId"], int_to_bytes(i)))
                             pointer = (x << 42) + (z << 21) + i
