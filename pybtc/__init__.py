@@ -8,7 +8,7 @@ from .address import *
 from .wallet import *
 from .crypto import *
 # from cache_strategies import LRU
-from cache_strategies import MRU
+from _lru import LRU
 from pybtc.connector import Connector
 
 

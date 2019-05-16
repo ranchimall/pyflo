@@ -1,7 +1,7 @@
 from pybtc import int_to_c_int, c_int_to_int, c_int_len
 import asyncio
 from collections import OrderedDict
-from pybtc  import MRU
+from pybtc  import LRU as MRU
 
 class UTXO():
     def __init__(self, db_pool, loop, log, cache_size):
