@@ -250,7 +250,7 @@ class Worker:
                                t += 1
                                self.destroyed_coins[r[0]] = True
                             except:
-                                pass
+                                self.log.critical(str(traceback.format_exc()))
                         for i in block["rawTx"][z]["vOut"]:
                             o = b"".join((block["rawTx"][z]["txId"], int_to_bytes(i)))
                             pointer = (x << 42) + (z << 21) + i
