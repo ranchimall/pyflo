@@ -1,0 +1,6 @@
+.idea/
+build/
+dist/
+.github/
+pybtc.egg-info/
+
