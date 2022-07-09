@@ -52,9 +52,14 @@ b'\xa3\xdas\x97e\x01\x81,\xd7\xb8!\xa2\x0b\xfb\t\xaf\nj\x89\x1eA\x9c\xdf\xb7a\xf
 True
 
 # SIGN AND VERIFY MESSAGE IN STANDARD OPERATION
-sig_msg_hex = pyflo.sign_message_standard_ops('vivek', a.private_key.wif)
+>> pyflo.sign_message_standard_ops('vivek', a.private_key.wif)
+'3045022039747449a6fbac008d04d763a3a62f2261d1c5a35ee6a21a8354d8757d27593802210085a4d4b9886de6d06c3563c97160c8d70f492ce56f9e00dbcd7276004369402e'
+>> sig_msg_hex = pyflo.sign_message_standard_ops('vivek', a.private_key.wif)
 
 # To verify the above signature, run the following in the console of any Standard Ops app 
-floCrypto.verifySign('vivek', sig_msg_hex, a.public_key.hex) 
+>> sign_msg_hex = '3045022039747449a6fbac008d04d763a3a62f2261d1c5a35ee6a21a8354d8757d27593802210085a4d4b9886de6d06c3563c97160c8d70f492ce56f9e00dbcd7276004369402e'
+>> a.public_key.hex = '033c30b269e2d5df229f3f0ce294b19c4f0a3a8d12280415ce41e7bd3784a619c4'
+>> floCrypto.verifySign('vivek', sig_msg_hex, a.public_key.hex) 
+true
 
 ```
