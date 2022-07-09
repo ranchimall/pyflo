@@ -116,3 +116,51 @@ fetch("https://flo-sign-validator.duckdns.org", {
   .catch((error) => console.error("Error:", error));
 
 ```
+
+** PHP **
+```
+            function callAPI($method, $url, $data){
+            $curl = curl_init();
+            switch ($method){
+                case "POST":
+                    curl_setopt($curl, CURLOPT_POST, 1);
+                    if ($data)
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                    break;
+                case "PUT":
+                    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                    if ($data)
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);                              
+                    break;
+                default:
+                    if ($data)
+                        $url = sprintf("%s?%s", $url, http_build_query($data));
+            }
+            // OPTIONS:
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'APIKEY: 111111111111111111111',
+                'Content-Type: application/json',
+            ));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            // EXECUTE:
+            $result = curl_exec($curl);
+            curl_close($curl);
+            return $result;
+            }
+            
+            $floID = $_POST['floID'];
+            $pubKey = $_POST['floPubKey'];
+            $message = $_POST['message'];
+            $signDataWithFlo = $_POST['signDataWithFlo'];
+    
+    
+            $data_array =  array( "floID"        => $floID, "pubKey" => $pubKey, "message" => $message, "sign" => $signDataWithFlo  );
+            $make_call = callAPI('POST', 'https://flo-sign-validator.duckdns.org', json_encode($data_array));
+            $response = json_decode($make_call, true);
+            
+            print_r($response);
+
+```
+            
