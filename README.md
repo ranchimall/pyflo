@@ -1,6 +1,4 @@
-<img src="docs/img/pybtc.png" width="100">
-
-## Python bitcoin library
+## Python bitcoin library modified for FLO
 
 Current version is 2.0
 
