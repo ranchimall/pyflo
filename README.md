@@ -16,11 +16,11 @@ Current version is 2.0
 
 ### Installation
 
-To install pybtc, simply use pip
+To install pyflo, simply use pip
 
-    $ git clone https://github.com/bitaps-com/pybtc
-    $ cd pybtc
-    $ python3 setup.py install
+    $ git clone https://github.com/ranchimall/pyflo
+    $ cd pyflo
+    $ sudo python3 setup.py install
     
 ### Dependencies
 
@@ -40,7 +40,6 @@ Every message sent to the Blockchain is in hash format, and not in plain string.
 >>> import pybtc
 
 # ADDRESS GENERATION 
->>> a = pybtc.Address()
 >>> a = pybtc.Address(address_type="P2PKH")
 >>> a.address
 'FTP7LL7QjhgKfqYX1pis18bCqEpZaGSRzZ'
@@ -72,18 +71,5 @@ b'\xa3\xdas\x97e\x01\x81,\xd7\xb8!\xa2\x0b\xfb\t\xaf\nj\x89\x1eA\x9c\xdf\xb7a\xf
 True
 ```
 
-
-### How to Contribute
-
-In order to make a clone of the GitHub repo: open the link and press the “Fork” button on the upper-right menu of the web page.
-
-Workflow is pretty straightforward:
-
-1. Clone the GitHub
-2. Make a change
-3. Make sure all tests passed
-4. Add a record into file into change.log.
-5. Commit changes to own pybtc clone
-6. Make pull request from github page for your clone against master branch
 
 
