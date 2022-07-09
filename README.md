@@ -76,3 +76,43 @@ New libraries used - hashlib
 The elliptical curve folder, holds the code taken from starkbank ecdsa (MIT License)
 no other additional dependencies
 
+The signature generated with **sign_message_standard_ops** cannot be verified using purely Pyflo. Users can use the following API to verify signatures 
+
+** Python **
+``` 
+import requests
+
+url = 'https://flo-sign-validator.duckdns.org'
+myobj = {'floID': floID,
+            'pubKey': pubKey,
+            'message': message,
+            'sign': sign}
+
+x = requests.post(url, json = myobj)
+print(x.text)
+
+```
+
+** JavaScript **
+``` 
+fetch("https://flo-sign-validator.duckdns.org", {
+  method: "POST",
+  body: JSON.stringify({
+    floID: floID,
+    pubKey: pubKey,
+    message: message,
+    sign: sign
+  }),
+  headers: {
+    "Content-type": "application/json; charset=UTF-8",
+  },
+})
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data) {
+    console.log(data);
+  })
+  .catch((error) => console.error("Error:", error));
+
+```
