@@ -14,7 +14,7 @@ from pybtc.functions.encode import (encode_base58,
                                     base32charset_upcase)
 
 
-def hash_to_address(address_hash, testnet=False, script_hash=False, witness_version=0):
+def hash_to_address(address_hash, testnet=False, script_hash=False, witness_version=None):
     """
     Get address from public key/script hash. In case PUBKEY, P2PKH, P2PKH public key/script hash is SHA256+RIPEMD160,
     P2WSH script hash is SHA256.
@@ -70,7 +70,7 @@ def hash_to_address(address_hash, testnet=False, script_hash=False, witness_vers
     return "%s1%s" % (hrp, rebase_5_to_32(address_hash + checksum).decode())
 
 
-def public_key_to_address(pubkey, testnet=False, p2sh_p2wpkh=False, witness_version=0):
+def public_key_to_address(pubkey, testnet=False, p2sh_p2wpkh=False, witness_version=None):
     """
     Get address from public key/script hash. In case PUBKEY, P2PKH, P2PKH public key/script hash is SHA256+RIPEMD160,
     P2WSH script hash is SHA256.
