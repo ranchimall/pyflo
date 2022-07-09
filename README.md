@@ -26,10 +26,6 @@ To install pyflo,
 * secp256k1
 
 
-### Documentation
-
-Documentation is available at https://pybtc.readthedocs.io
-
 #### Message signing and verification 
 
 Every message sent to the Blockchain is in hash format, and not in plain string. So we convert the message we are signing into a SHA256 hash before. 
