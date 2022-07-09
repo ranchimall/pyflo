@@ -63,3 +63,16 @@ True
 true
 
 ```
+
+The **sign_message_standard_ops** function verifies with [RanchiMall standard operations](https://github.com/ranchimall/Standard_Operations).
+Things to note:
+The function now takes 2 parameters -
+
+1. Message in string ( not hex-encoded string)
+2. Private key in wif (not bytes etc.)
+The hex parameter has been removed as we are always returning hex in standard ops
+
+New libraries used - hashlib
+The elliptical curve folder, holds the code taken from starkbank ecdsa (MIT License)
+no other additional dependencies
+
