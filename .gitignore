@@ -3,4 +3,5 @@ build/
 dist/
 .github/
 pybtc.egg-info/
+*.pyc
 
