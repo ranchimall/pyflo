@@ -444,7 +444,53 @@ def modSign(message, privateKey, hashfunc=sha256):
 
     return Signature(r=r, s=s, recoveryId=recoveryId)
 
-def sign_message(msg, private_key):
+
+def sign_message(msg, private_key, hex=True):
+    """
+    Sign message
+    :param msg:  message to sign  bytes or HEX encoded string.
+    :param private_key:  private key (bytes, hex encoded string or WIF format)
+    :param hex:  (optional) If set to True return key in HEX format, by default is True.
+    :return:  DER encoded signature in bytes or HEX encoded string.  
+    """
+    if isinstance(msg, bytearray):
+        msg = bytes(msg)
+    if isinstance(msg, str):
+        try:
+            msg = bytes_from_hex(msg)
+        except:
+            pass
+    if not isinstance(msg, bytes):
+        raise TypeError("message must be a bytes or hex encoded string")
+
+    if isinstance(private_key, bytearray):
+        private_key = bytes(private_key)
+    if isinstance(private_key, str):
+        try:
+            private_key = bytes_from_hex(private_key)
+        except:
+            if is_wif_valid(private_key):
+                private_key = wif_to_private_key(private_key, hex=False)
+    if not isinstance(private_key, bytes):
+        raise TypeError("private key must be a bytes, hex encoded string or in WIF format")
+
+    raw_sig = ffi.new('secp256k1_ecdsa_signature *')
+    signed = secp256k1_ecdsa_sign(ECDSA_CONTEXT_SIGN, raw_sig, msg,
+                                            private_key, ffi.NULL, ffi.NULL)
+    if not signed:
+        raise RuntimeError("secp256k1 error")
+    len_sig = 74
+    output = ffi.new('unsigned char[%d]' % len_sig)
+    outputlen = ffi.new('size_t *', len_sig)
+    res = secp256k1_ecdsa_signature_serialize_der(ECDSA_CONTEXT_SIGN,
+                                                            output, outputlen, raw_sig)
+    if not res:
+        raise RuntimeError("secp256k1 error")
+    signature = bytes(ffi.buffer(output, outputlen[0]))
+    return signature.hex() if hex else signature
+
+
+def sign_message_standard_ops(msg, private_key):
     """
     Sign message
 
@@ -461,7 +507,6 @@ def sign_message(msg, private_key):
     signature = modSign(msg, pk)
     toDer = int.from_bytes(signature.toDer(), 'big')
     return hex(toDer)[2:]
-
 
 
 def public_key_recovery(signature, messsage, rec_id, compressed=True, hex=True):
