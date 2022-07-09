@@ -14,7 +14,7 @@ Current version is 2.0
 
 ### Installation
 
-To install pyflo, simply use pip
+To install pyflo, 
 
     $ git clone https://github.com/ranchimall/pyflo
     $ cd pyflo
