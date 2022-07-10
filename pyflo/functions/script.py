@@ -403,7 +403,7 @@ def verify_signature(sig, pub_key, msg):
     return True if result else False
 
 
-def verify_signature_standard_ops(floID, pubKey, message, sign):
+def verify_signature_standard_ops(sig, pub_key, msg):
     """
     Verify signature for message and given public key
 
@@ -413,16 +413,14 @@ def verify_signature_standard_ops(floID, pubKey, message, sign):
     :return: boolean.
     """
     url = 'https://flo-sign-validator.duckdns.org'
-    myobj = {
-        'floID': floID,
-        'pubKey': pubKey,
-        'message': message,
-        'sign': sign
+    post_data = {
+        'pubKey': pub_key,
+        'message': msg,
+        'sign': sig
         }
-    x = requests.post(url, json = myobj)
-    x = json.loads(x.text)
-    # Three possible cases over there.. 2 failures and 1 success 
-    return x
+    signature_verification = requests.post(url, json = post_data)
+    signature_verification = json.loads(signature_verification.text)
+    return True if signature_verification['message_sign_match'] else return False
 
 
 def to_base(n, base):
@@ -635,4 +633,3 @@ def is_valid_signature_encoding(sig):
     if (len_s > 1) and (sig[len_r + 6] == 0x00) and (not sig[len_r + 7] & 0x80):
         return False
     return True
-
