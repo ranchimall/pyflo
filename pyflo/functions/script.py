@@ -22,6 +22,7 @@ from pyflo.functions.tools import bytes_from_hex, int_to_bytes, get_stream
 from pyflo.functions.hash import hash160, sha256
 from pyflo.functions.address import hash_to_address
 from pyflo.functions.key import is_wif_valid, wif_to_private_key
+import requests, json
 
 
 def public_key_to_pubkey_script(key, hex=True):
@@ -163,9 +164,6 @@ def script_to_address(script, testnet=False):
         return hash_to_address(d["addressHash"], testnet=testnet,
                                script_hash=script_hash, witness_version=witness_version)
     return None
-
-
-
 
 
 def decode_script(script, asm=False):
@@ -403,6 +401,29 @@ def verify_signature(sig, pub_key, msg):
         raise TypeError("public key format error")
     result = secp256k1_ecdsa_verify(ECDSA_CONTEXT_VERIFY, raw_sig, msg, raw_pubkey)
     return True if result else False
+
+
+def verify_signature_standard_ops(floID, pubKey, message, sign):
+    """
+    Verify signature for message and given public key
+
+    :param sig: signature in bytes or HEX encoded string.
+    :param pub_key:  public key in bytes or HEX encoded string.
+    :param msg:  message in bytes or HEX encoded string.
+    :return: boolean.
+    """
+    url = 'https://flo-sign-validator.duckdns.org'
+    myobj = {
+        'floID': floID,
+        'pubKey': pubKey,
+        'message': message,
+        'sign': sign
+        }
+    x = requests.post(url, json = myobj)
+    x = json.loads(x.text)
+    # Three possible cases over there.. 2 failures and 1 success 
+    return x
+
 
 def to_base(n, base):
     if base == 10:
