@@ -420,7 +420,10 @@ def verify_signature_standard_ops(sig, pub_key, msg):
         }
     signature_verification = requests.post(url, json = post_data)
     signature_verification = json.loads(signature_verification.text)
-    return True if signature_verification['message_sign_match'] else return False
+    if signature_verification['message_sign_match']:
+        return True 
+    else:
+        return False
 
 
 def to_base(n, base):
