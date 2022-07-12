@@ -403,25 +403,30 @@ def verify_signature(sig, pub_key, msg):
     return True if result else False
 
 
-def verify_signature_standard_ops(sig, pub_key, msg):
+def verify_signature_standard_ops(sig, pub_key, msg, flo_id):
     """
     Verify signature for message and given public key
 
     :param sig: signature in bytes or HEX encoded string.
     :param pub_key:  public key in bytes or HEX encoded string.
-    :param msg:  message in bytes or HEX encoded string.
+    :param msg:  message in bytes, string or HEX encoded string.
+    :flo_id: FLO ID in HEX encoded string.
     :return: boolean.
     """
-    url = 'https://flo-sign-validator.duckdns.org'
-    post_data = {
-        'pubKey': pub_key,
-        'message': msg,
-        'sign': sig
-        }
-    signature_verification = requests.post(url, json = post_data)
-    signature_verification = json.loads(signature_verification.text)
-    if signature_verification['message_sign_match']:
-        return True 
+    derived_floid = pyflo.Address(pub_key)
+    if flo_id==derived_floid:
+        url = 'https://flo-sign-validator.duckdns.org'
+        post_data = {
+            'pubKey': pub_key,
+            'message': msg,
+            'sign': sig
+            }
+        signature_verification = requests.post(url, json = post_data)
+        signature_verification = json.loads(signature_verification.text)
+        if signature_verification['message_sign_match']:
+            return True 
+        else:
+            return False
     else:
         return False
 
