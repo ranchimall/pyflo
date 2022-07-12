@@ -413,7 +413,8 @@ def verify_signature_standard_ops(sig, pub_key, msg, flo_id):
     :flo_id: FLO ID in HEX encoded string.
     :return: boolean.
     """
-    derived_floid = pyflo.Address(pub_key)
+    pub_key = pyflo.PublicKey(pub_key)
+    derived_floid = pyflo.Address(pub_key, address_type="P2PKH").address
     if flo_id==derived_floid:
         url = 'https://flo-sign-validator.duckdns.org'
         post_data = {
