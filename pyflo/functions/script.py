@@ -403,7 +403,7 @@ def verify_signature(sig, pub_key, msg):
     return True if result else False
 
 
-def verify_signature_standard_ops(sig, pub_key, msg, flo_id):
+def verify_signature_standard_ops(sig, pub_key, msg, floID):
     """
     Verify signature for message and given public key
 
@@ -413,23 +413,20 @@ def verify_signature_standard_ops(sig, pub_key, msg, flo_id):
     :flo_id: FLO ID in HEX encoded string.
     :return: boolean.
     """
-    pub_key = pyflo.PublicKey(pub_key)
-    derived_floid = pyflo.Address(pub_key, address_type="P2PKH").address
-    if flo_id==derived_floid:
-        url = 'https://flo-sign-validator.duckdns.org'
-        post_data = {
-            'pubKey': pub_key,
-            'message': msg,
-            'sign': sig
-            }
-        signature_verification = requests.post(url, json = post_data)
-        signature_verification = json.loads(signature_verification.text)
-        if signature_verification['message_sign_match']:
-            return True 
-        else:
-            return False
+    url = 'https://flo-sign-validator.duckdns.org'
+    post_data = {
+        'floID': floID,
+        'pubKey': pub_key,
+        'message': msg,
+        'sign': sig
+        }
+    signature_verification = requests.post(url, json = post_data)
+    signature_verification = json.loads(signature_verification.text)
+    if signature_verification['success']:
+        return True 
     else:
         return False
+
 
 
 def to_base(n, base):
