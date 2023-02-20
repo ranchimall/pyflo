@@ -129,7 +129,8 @@ def address_type(address, num=False):
     :return: address type in string or numeric format. 
     """
     if address[0] in (TESTNET_SCRIPT_ADDRESS_PREFIX,
-                      MAINNET_SCRIPT_ADDRESS_PREFIX):
+                      MAINNET_SCRIPT_ADDRESS_PREFIX,
+                      MAINNET_SCRIPT_ADDRESS_PREFIX_2):
         t = 'P2SH'
     elif address[0] in (MAINNET_ADDRESS_PREFIX,
                         TESTNET_ADDRESS_PREFIX,
@@ -155,7 +156,7 @@ def address_net_type(address):
     :param address: address in base58 or bech32 format.
     :return: address network type in string format or None. 
     """
-    if address[0] in (MAINNET_SCRIPT_ADDRESS_PREFIX,
+    if address[0] in (MAINNET_SCRIPT_ADDRESS_PREFIX, MAINNET_SCRIPT_ADDRESS_PREFIX_2,
                       MAINNET_ADDRESS_PREFIX):
         return "mainnet"
     elif address[:2] == MAINNET_SEGWIT_ADDRESS_PREFIX:
@@ -178,7 +179,8 @@ def address_to_script(address, hex=False):
     :return: public key script in HEX or bytes string.
     """
     if address[0] in (TESTNET_SCRIPT_ADDRESS_PREFIX,
-                      MAINNET_SCRIPT_ADDRESS_PREFIX):
+                      MAINNET_SCRIPT_ADDRESS_PREFIX,
+                      MAINNET_SCRIPT_ADDRESS_PREFIX_2):
         s = [OP_HASH160,
              b'\x14',
              address_to_hash(address, hex=False),
@@ -222,6 +224,7 @@ def is_address_valid(address, testnet=False):
         return False
     if address[0] in (MAINNET_ADDRESS_PREFIX,
                       MAINNET_SCRIPT_ADDRESS_PREFIX,
+                      MAINNET_SCRIPT_ADDRESS_PREFIX_2,
                       TESTNET_ADDRESS_PREFIX,
                       TESTNET_ADDRESS_PREFIX_2,
                       TESTNET_SCRIPT_ADDRESS_PREFIX):
@@ -232,7 +235,8 @@ def is_address_valid(address, testnet=False):
                 return False
         else:
             if address[0] not in (MAINNET_ADDRESS_PREFIX,
-                                  MAINNET_SCRIPT_ADDRESS_PREFIX):
+                                  MAINNET_SCRIPT_ADDRESS_PREFIX,
+                                  MAINNET_SCRIPT_ADDRESS_PREFIX_2):
                 return False
         h = decode_base58(address)
         if len(h) != 25:
@@ -275,11 +279,11 @@ def is_address_valid(address, testnet=False):
         if checksum != checksum2:
             return False
         return True
+    else:
+        return False
 
 
 def get_witness_version(address):
     address = address.split("1")[1]
     h = rebase_32_to_5(address)
     return h[0]
-
-
