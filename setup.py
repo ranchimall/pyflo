@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 
-setup(name='pyflo',
+setup(name='pyflo-lib',
       version='2.0.9',
       description='Python FLO library',
       keywords='flo',
